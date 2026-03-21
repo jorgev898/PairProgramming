@@ -426,6 +426,48 @@
             font-size: .78rem;
             margin-bottom: 14px;
         }
+
+        .auth-nav {
+            width: 100%;
+            max-width: 820px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .auth-nav a,
+        .auth-nav button {
+            font-size: .75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            background: rgba(255,255,255,.03);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 14px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: border-color .2s, color .2s;
+        }
+
+        .auth-nav a:hover,
+        .auth-nav button:hover {
+            border-color: var(--border-hi);
+            color: var(--text);
+        }
+
+        .auth-nav .auth-nav-primary {
+            color: var(--green);
+            border-color: rgba(0,229,160,.35);
+        }
+
+        .auth-nav .auth-nav-user {
+            font-size: .75rem;
+            color: var(--text-dim);
+            margin-right: 4px;
+        }
     </style>
 </head>
 <body>
@@ -434,6 +476,19 @@
 <div class="blob blob-2"></div>
 
 <div class="wrapper">
+
+    <nav class="auth-nav" aria-label="Account">
+        @auth
+            <span class="auth-nav-user">{{ auth()->user()->name }}</span>
+            <form method="POST" action="{{ route('logout') }}" style="display:inline;margin:0;">
+                @csrf
+                <button type="submit">Log out</button>
+            </form>
+        @else
+            <a href="{{ route('login') }}">Log in</a>
+            <a href="{{ route('register') }}" class="auth-nav-primary">Register</a>
+        @endauth
+    </nav>
 
     <header>
         <div class="logo">
