@@ -185,6 +185,17 @@
                         <p>{{ __($section['body']) }}</p>
                     </div>
 
+                @elseif ($section['type'] === 'video')
+                    <div class="content-section">
+                        <h2><span class="section-icon">🎥</span> {{ __($section['title']) }}</h2>
+                        @if (!empty($section['body']))
+                            <p>{{ __($section['body']) }}</p>
+                        @endif
+                        <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.5); box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin: 20px 0;">
+                            <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="{{ $section['url'] }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        </div>
+                    </div>
+
                 @elseif ($section['type'] === 'concept')
                     <div class="content-section">
                         <h2><span class="section-icon">💡</span> {{ __($section['title']) }}</h2>
