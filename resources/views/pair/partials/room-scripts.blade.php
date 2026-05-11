@@ -49,6 +49,11 @@
     let cursorTimeout = null;
     let remoteCursorDecos = [];
     let mouseTimeout = null;
+    let previewOpen = false;
+    let autoPreview = false;
+    let previewTimeout = null;
+    let isPreviewing = false;
+    let lastPreviewCode = '';
 
     /* ══════════════════════════════════════════
        MONACO EDITOR
@@ -99,6 +104,11 @@
             setSaveStatus('saving');
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(() => saveCode(editor.getValue()), 600);
+            // Auto-preview trigger
+            if (autoPreview && previewOpen) {
+                clearTimeout(previewTimeout);
+                previewTimeout = setTimeout(() => previewCode(), 2000);
+            }
         });
 
         // Cursor position: send to server (debounced)
@@ -686,4 +696,142 @@
         requestAnimationFrame(animateCursor);
     }
     requestAnimationFrame(animateCursor);
+
+    /* ══════════════════════════════════════════
+       PREVIEW SYSTEM
+    ══════════════════════════════════════════ */
+    function togglePreview() {
+        previewOpen = !previewOpen;
+        const area = document.getElementById('editor-area');
+        const btn = document.getElementById('btn-preview');
+        if (previewOpen) {
+            area.classList.add('split-view');
+            btn.classList.add('active');
+            if (editor) {
+                setTimeout(() => editor.layout(), 100);
+                previewCode();
+            }
+        } else {
+            area.classList.remove('split-view');
+            btn.classList.remove('active');
+            if (editor) setTimeout(() => editor.layout(), 100);
+        }
+    }
+
+    function toggleAutoPreview() {
+        autoPreview = !autoPreview;
+        const el = document.getElementById('auto-toggle');
+        el.classList.toggle('on', autoPreview);
+    }
+
+    async function previewCode() {
+        if (!editor || isPreviewing) return;
+        const code = editor.getValue();
+        if (code === lastPreviewCode && !Object.keys(ComposeSimulator.state).length) return;
+        lastPreviewCode = code;
+        isPreviewing = true;
+        setPreviewStatus('compiling', '⏳ Compiling...');
+
+        try {
+            const res = await fetch('/room/' + ROOM_CODE + '/preview', {
+                method: 'POST', headers: APP_HEADERS,
+                body: JSON.stringify({ code })
+            });
+            const data = await res.json();
+
+            if (data.errors && data.errors.length > 0) {
+                setPreviewStatus('error', '⚠ ' + data.errors.length + ' error(s)');
+                const errorHtml = ComposeSimulator.renderPhone(
+                    `<div class="cs-error"><span>⚠️</span>${data.errors.map(e => '<p>' + escHtml(e) + '</p>').join('')}</div>`
+                );
+                document.getElementById('preview-content').innerHTML = errorHtml;
+                return;
+            }
+
+            if (data.mode === 'compose') {
+                const html = ComposeSimulator.parse(data.kotlinCode);
+                document.getElementById('preview-content').innerHTML = html;
+                setPreviewStatus('ready', '✓ Compose Mode');
+            } else {
+                runConsolePreview(data.jsCode);
+                setPreviewStatus('ready', '✓ Console Mode');
+            }
+        } catch (e) {
+            setPreviewStatus('error', '⚠ ' + e.message);
+        } finally {
+            isPreviewing = false;
+        }
+    }
+
+    function refreshPreview() {
+        if (!editor || !previewOpen) return;
+        const code = editor.getValue();
+        const activeId = document.activeElement ? document.activeElement.id : null;
+        const activeSelStart = document.activeElement ? document.activeElement.selectionStart : null;
+        
+        const html = ComposeSimulator.parse(code, true);
+        document.getElementById('preview-content').innerHTML = html;
+        
+        if (activeId && activeId.startsWith('tf_')) {
+            const el = document.getElementById(activeId);
+            if (el) {
+                el.focus();
+                if (activeSelStart !== null && typeof el.selectionStart === 'number') {
+                    el.selectionStart = el.selectionEnd = activeSelStart;
+                }
+            }
+        }
+    }
+
+    function runConsolePreview(jsCode) {
+        if (!jsCode) {
+            document.getElementById('preview-content').innerHTML =
+                ComposeSimulator.renderPhone('<div class="cs-error"><span>📋</span><p>No output</p></div>');
+            return;
+        }
+        const outputLines = [];
+        const sandboxHtml = `<!DOCTYPE html>
+<html><head><style>
+    body { font-family: 'JetBrains Mono', monospace; background: #1a1a2e; color: #00e5a0;
+           padding: 12px; font-size: 12px; line-height: 1.6; margin: 0; }
+    .line { padding: 2px 0; white-space: pre-wrap; word-break: break-all; }
+    .error { color: #ff6b6b; }
+</style></head><body><div id="out"></div>
+<script>
+    const out = document.getElementById('out');
+    const origLog = console.log;
+    console.log = function() {
+        const text = Array.from(arguments).map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ');
+        const div = document.createElement('div');
+        div.className = 'line';
+        div.textContent = '> ' + text;
+        out.appendChild(div);
+    };
+    console.error = function() {
+        const text = Array.from(arguments).join(' ');
+        const div = document.createElement('div');
+        div.className = 'line error';
+        div.textContent = '⚠ ' + text;
+        out.appendChild(div);
+    };
+    // Redirect Kotlin println
+    if (typeof kotlin !== 'undefined' || true) {
+        var println = console.log;
+    }
+    try { ${jsCode} } catch(e) { console.error(e.message); }
+<\/script></body></html>`;
+
+        const phoneHtml = ComposeSimulator.renderPhone('').replace(
+            '<div class="phone-screen"></div>',
+            `<iframe class="phone-screen" style="border:none;flex:1;background:#1a1a2e" sandbox="allow-scripts" srcdoc="${sandboxHtml.replace(/"/g, '&quot;')}"></iframe>`
+        );
+        document.getElementById('preview-content').innerHTML = phoneHtml;
+    }
+
+    function setPreviewStatus(type, text) {
+        const el = document.getElementById('preview-status');
+        if (!el) return;
+        el.className = 'preview-status ' + type;
+        el.textContent = text;
+    }
 </script>

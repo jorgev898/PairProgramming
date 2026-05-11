@@ -315,6 +315,77 @@ class SessionController extends Controller
         return response()->json(['ok' => true]);
     }
 
+    /**
+     * Preview: compila Kotlin→JS via api.kotlinlang.org
+     * Si detecta @Composable, retorna mode='compose' para el simulador client-side
+     */
+    public function previewCode(Request $request, string $code)
+    {
+        $request->validate(['code' => ['required', 'string']]);
+
+        $kotlinCode = $request->input('code');
+
+        // Detect Compose patterns
+        $isCompose = preg_match('/@Composable|Scaffold|TopAppBar|MaterialTheme|Column\s*\(|Row\s*\(|LazyColumn|BottomNavigation/i', $kotlinCode);
+
+        if ($isCompose) {
+            return response()->json([
+                'mode' => 'compose',
+                'kotlinCode' => $kotlinCode,
+                'errors' => [],
+            ]);
+        }
+
+        // Console mode: compile Kotlin→JS via kotlinlang.org
+        try {
+            $payload = [
+                'args' => '',
+                'files' => [
+                    [
+                        'name' => 'File.kt',
+                        'text' => $kotlinCode,
+                        'publicId' => '',
+                    ]
+                ],
+                'confType' => 'js',
+            ];
+
+            $response = Http::timeout(15)->post(
+                'https://api.kotlinlang.org/api/compiler/translate',
+                $payload
+            );
+
+            if ($response->failed()) {
+                return response()->json([
+                    'mode' => 'console',
+                    'jsCode' => '',
+                    'errors' => ['Kotlin compiler service unavailable. Try again.'],
+                ], 502);
+            }
+
+            $data = $response->json();
+            $errors = [];
+
+            if (!empty($data['errors'])) {
+                foreach ($data['errors'] as $err) {
+                    $errors[] = $err['message'] ?? (is_string($err) ? $err : json_encode($err));
+                }
+            }
+
+            return response()->json([
+                'mode' => 'console',
+                'jsCode' => $data['jsCode'] ?? '',
+                'errors' => $errors,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'mode' => 'console',
+                'jsCode' => '',
+                'errors' => ['Preview failed: ' . $e->getMessage()],
+            ], 500);
+        }
+    }
+
     // ── helpers ──────────────────────────────────────────────────────
 
     private function resolveRole(PairSession $session, ?string $name): ?string

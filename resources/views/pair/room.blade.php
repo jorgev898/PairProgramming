@@ -10,6 +10,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;800&display=swap"
         rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     @include('pair.partials.room-styles')
 </head>
 
@@ -48,33 +49,56 @@
     {{-- ── IDE LAYOUT ── --}}
     <div class="ide-container">
 
-        {{-- ── EDITOR AREA ── --}}
-        <div class="editor-area">
-            <div class="editor-toolbar">
-                <span class="lang-badge">Kotlin</span>
-                <button class="btn-run" id="btn-run" onclick="runCode()">▶ Run</button>
-                <span class="save-status" id="save-status">
-                    @if($myRole === 'driver') ✓ Ready @else 👁 Read-only @endif
-                </span>
-            </div>
+        {{-- ── EDITOR AREA (split-view capable) ── --}}
+        <div class="editor-area" id="editor-area">
 
-            <div class="editor-wrapper">
-                @if($myRole !== 'driver')
-                    <div class="readonly-badge" id="readonly-badge">👁 {{ __('Read-only · Navigator') }}</div>
-                @else
-                    <div class="readonly-badge" id="readonly-badge" style="display:none">👁
-                        {{ __('Read-only · Navigator') }}</div>
-                @endif
-                <div id="monaco-container"></div>
-            </div>
-
-            <div class="output-panel">
-                <div class="output-header">
-                    <h4>▸ {{ __('Output') }}</h4>
-                    <button class="clear-btn" onclick="clearOutput()">{{ __('Clear') }}</button>
+            {{-- ── LEFT: Editor + Output ── --}}
+            <div class="editor-main">
+                <div class="editor-toolbar">
+                    <span class="lang-badge">Kotlin</span>
+                    <button class="btn-run" id="btn-run" onclick="runCode()">▶ Run</button>
+                    <button class="btn-preview" id="btn-preview" onclick="togglePreview()">👁 Preview</button>
+                    <span class="auto-toggle" id="auto-toggle" onclick="toggleAutoPreview()">
+                        <span class="dot"></span> Auto
+                    </span>
+                    <span class="save-status" id="save-status">
+                        @if($myRole === 'driver') ✓ Ready @else 👁 Read-only @endif
+                    </span>
                 </div>
-                <div id="output-content"><span class="output-info">{{ __('Ready to run code...') }}</span></div>
+
+                <div class="editor-wrapper">
+                    @if($myRole !== 'driver')
+                        <div class="readonly-badge" id="readonly-badge">👁 {{ __('Read-only · Navigator') }}</div>
+                    @else
+                        <div class="readonly-badge" id="readonly-badge" style="display:none">👁
+                            {{ __('Read-only · Navigator') }}</div>
+                    @endif
+                    <div id="monaco-container"></div>
+                </div>
+
+                <div class="output-panel">
+                    <div class="output-header">
+                        <h4>▸ {{ __('Output') }}</h4>
+                        <button class="clear-btn" onclick="clearOutput()">{{ __('Clear') }}</button>
+                    </div>
+                    <div id="output-content"><span class="output-info">{{ __('Ready to run code...') }}</span></div>
+                </div>
             </div>
+
+            {{-- ── RIGHT: Preview Panel (hidden until toggled) ── --}}
+            <div class="preview-panel" id="preview-panel">
+                <div class="preview-header">
+                    <h4>📱 Preview</h4>
+                    <span class="preview-status" id="preview-status">{{ __('Ready') }}</span>
+                </div>
+                <div class="preview-content" id="preview-content">
+                    <div style="text-align:center;color:var(--text-lo);font-size:.75rem;padding:20px">
+                        <p style="font-size:2rem;margin-bottom:8px">📱</p>
+                        <p>{{ __('Write Compose code and click Preview') }}</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         {{-- ── SIDEBAR ── --}}
@@ -146,6 +170,7 @@
     {{-- ── MONACO LOADER ── --}}
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
 
+    @include('pair.partials.room-preview')
     @include('pair.partials.room-scripts')
 
 </body>

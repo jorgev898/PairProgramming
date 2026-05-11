@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
     // Editor & execution endpoints
     Route::post('/room/{code}/code', [SessionController::class , 'saveCode'])->name('pair.code.save');
     Route::post('/room/{code}/run', [SessionController::class , 'executeCode'])->name('pair.code.run');
+    Route::post('/room/{code}/preview', [SessionController::class , 'previewCode'])->name('pair.code.preview');
     Route::post('/room/{code}/cursor', [SessionController::class , 'saveCursor'])->name('pair.cursor.save');
 
     // Polling & chat
