@@ -44,6 +44,7 @@ class CourseController extends Controller
             'lessons.*.title' => 'required|string|max:255',
             'lessons.*.description' => 'nullable|string',
             'lessons.*.duration' => 'nullable|string|max:50',
+            'lessons.*.video_url' => 'nullable|url|max:255',
             'lessons.*.icon' => 'nullable|string|max:10',
             'lessons.*.available' => 'nullable|boolean',
         ]);
@@ -63,6 +64,7 @@ class CourseController extends Controller
                         'title' => $lessonData['title'],
                         'description' => $lessonData['description'] ?? null,
                         'duration' => $lessonData['duration'] ?? null,
+                        'video_url' => $lessonData['video_url'] ?? null,
                         'icon' => $lessonData['icon'] ?? null,
                         'available' => isset($lessonData['available']) ? (bool) $lessonData['available'] : false,
                         'order' => $index + 1,
@@ -103,6 +105,7 @@ class CourseController extends Controller
             'lessons.*.title' => 'required|string|max:255',
             'lessons.*.description' => 'nullable|string',
             'lessons.*.duration' => 'nullable|string|max:50',
+            'lessons.*.video_url' => 'nullable|url|max:255',
             'lessons.*.icon' => 'nullable|string|max:10',
             'lessons.*.available' => 'nullable|boolean',
         ]);
@@ -124,6 +127,7 @@ class CourseController extends Controller
                         'title' => $lessonData['title'],
                         'description' => $lessonData['description'] ?? null,
                         'duration' => $lessonData['duration'] ?? null,
+                        'video_url' => $lessonData['video_url'] ?? null,
                         'icon' => $lessonData['icon'] ?? null,
                         'available' => isset($lessonData['available']) ? (bool) $lessonData['available'] : false,
                         'order' => $index + 1,

@@ -14,6 +14,7 @@ class Lesson extends Model
         'title',
         'description',
         'duration',
+        'video_url',
         'icon',
         'order',
         'available',

@@ -250,6 +250,11 @@
                         </div>
                         
                         <div class="form-group">
+                            <label>Video URL</label>
+                            <input type="url" name="lessons[{{ $index }}][video_url]" class="form-control" value="{{ $lesson->video_url }}">
+                        </div>
+                        
+                        <div class="form-group">
                             <label>Description</label>
                             <input type="text" name="lessons[{{ $index }}][description]" class="form-control" value="{{ $lesson->description }}">
                         </div>
@@ -303,6 +308,11 @@
                             <input type="text" name="lessons[${lessonCount}][duration]" class="form-control" placeholder="e.g. 20 min">
                         </div>
                     </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Video URL</label>
+                    <input type="url" name="lessons[${lessonCount}][video_url]" class="form-control" placeholder="e.g. https://youtube.com/...">
                 </div>
                 
                 <div class="form-group">

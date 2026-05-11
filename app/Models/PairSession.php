@@ -8,6 +8,7 @@ class PairSession extends Model
 {
     protected $fillable = [
         'code',
+        'lesson_id',
         'driver',
         'navigator',
         'status',
@@ -22,4 +23,9 @@ class PairSession extends Model
         'participant_chat' => 'array',
         'cursors' => 'array',
     ];
+
+    public function lesson()
+    {
+        return $this->belongsTo(Lesson::class);
+    }
 }

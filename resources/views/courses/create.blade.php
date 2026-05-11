@@ -262,6 +262,11 @@
                 </div>
                 
                 <div class="form-group">
+                    <label>Video URL</label>
+                    <input type="url" name="lessons[${lessonCount}][video_url]" class="form-control" placeholder="e.g. https://youtube.com/...">
+                </div>
+                
+                <div class="form-group">
                     <label>Description</label>
                     <input type="text" name="lessons[${lessonCount}][description]" class="form-control">
                 </div>

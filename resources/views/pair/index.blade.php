@@ -491,6 +491,9 @@
 
             <form method="POST" action="{{ route('pair.create') }}" id="form-create">
                 @csrf
+                @if(request()->has('lesson_id'))
+                    <input type="hidden" name="lesson_id" value="{{ request('lesson_id') }}">
+                @endif
                 <div class="form-group">
                     <label for="username-create">{{ __('Your display name') }}</label>
                     <input

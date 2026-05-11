@@ -275,7 +275,7 @@
         <div class="cta-section">
             <h2>{{ __('Ready to Practice?') }}</h2>
             <p>{{ __('Start a pair programming session and work on the exercises with your partner.') }}</p>
-            <a href="{{ route('pair.index') }}" class="btn-cta" id="btn-start-session">
+            <a href="{{ route('pair.index', ['lesson_id' => $lesson['id']]) }}" class="btn-cta" id="btn-start-session">
                 ⚡ {{ __('Start Pair Session') }}
                 <span class="arrow">→</span>
             </a>

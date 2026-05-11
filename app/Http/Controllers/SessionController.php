@@ -18,12 +18,14 @@ class SessionController extends Controller
     {
         $request->validate([
             'username' => ['required', 'string', 'max:30', 'regex:/^[a-zA-Z0-9_\- ]+$/'],
+            'lesson_id' => ['nullable', 'exists:lessons,id'],
         ]);
 
         $code = strtoupper(Str::random(6));
 
         PairSession::create([
             'code' => $code,
+            'lesson_id' => $request->input('lesson_id'),
             'driver' => $request->input('username'),
             'navigator' => null,
             'status' => 'waiting',
@@ -65,7 +67,7 @@ class SessionController extends Controller
     public function room(string $code)
     {
         $code = strtoupper($code);
-        $session = PairSession::where('code', $code)->firstOrFail();
+        $session = PairSession::with('lesson.course')->where('code', $code)->firstOrFail();
 
         $myName = session('username_' . $code);
         $myRole = $this->resolveRole($session, $myName);

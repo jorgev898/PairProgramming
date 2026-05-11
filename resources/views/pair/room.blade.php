@@ -26,6 +26,12 @@
             <button class="copy-btn" onclick="copyCode()" title="{{ __('Copy code') }}">⧉</button>
         </div>
         <div class="topbar-divider"></div>
+        @if($session->lesson)
+            <button class="lesson-modal-btn" onclick="toggleLessonModal()" title="{{ __('View Lesson') }}" style="background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); color: var(--primary); padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;">
+                📖 {{ __('Reto:') }} {{ $session->lesson->title }}
+            </button>
+            <div class="topbar-divider"></div>
+        @endif
         <div id="role-indicator"
             class="role-indicator {{ $myRole === 'driver' ? 'is-driver' : ($myRole === 'navigator' ? 'is-navigator' : '') }}">
             @if($myRole === 'driver') 🧑‍💻 Driver @elseif($myRole === 'navigator') 🧭 Navigator @else 👀 ... @endif
@@ -171,6 +177,7 @@
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
 
     @include('pair.partials.room-preview')
+    @include('pair.partials.lesson-modal')
     @include('pair.partials.room-scripts')
 
 </body>
