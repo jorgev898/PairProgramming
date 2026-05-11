@@ -21,7 +21,7 @@ php artisan down --retry=30 || true
 
 # Bajar últimos cambios
 print_step "Bajando cambios de GitHub..."
-git pull origin main
+git pull origin Tostada
 
 # Instalar dependencias PHP (si cambiaron)
 print_step "Actualizando dependencias PHP..."

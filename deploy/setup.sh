@@ -140,7 +140,7 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
 print_step "7/9 - Clonando y configurando el proyecto..."
 
 mkdir -p ${APP_DIR}
-git clone ${REPO_URL} ${APP_DIR}
+git clone -b Tostada ${REPO_URL} ${APP_DIR}
 cd ${APP_DIR}
 
 # Instalar dependencias PHP
