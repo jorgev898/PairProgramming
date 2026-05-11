@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     zip unzip nodejs npm libpq-dev
 
 # Instalar extensiones PHP
-RUN docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
