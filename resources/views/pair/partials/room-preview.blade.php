@@ -310,12 +310,12 @@ const ComposeSimulator = {
 
     renderText(args) {
         let text = '';
-        const strM = args.match(/^\s*"([^"]*)"/);
-        if (strM) text = strM[1];
+        const strM = args.match(/^\s*"((?:[^"\\]|\\.)*)"/);
+        if (strM) text = strM[1].replace(/\\"/g, '"');
         else {
             // State interpolation: "Count: ${viewModel.count}" or "$count"
-            const intM = args.match(/^\s*"([^"]*)"/s) || args.match(/^\s*text\s*=\s*"([^"]*)"/);
-            if (intM) text = intM[1];
+            const intM = args.match(/^\s*"((?:[^"\\]|\\.)*)"/s) || args.match(/^\s*text\s*=\s*"((?:[^"\\]|\\.)*)"/);
+            if (intM) text = intM[1].replace(/\\"/g, '"');
         }
         // Resolve state interpolations
         text = text.replace(/\$\{?(?:\w+\.)?(\w+)\}?/g, (_, key) => {
@@ -550,7 +550,7 @@ const ComposeSimulator = {
                 if (stateKeys.length > 0) return `ComposeSimulator.setState('${stateKeys[0]}', ComposeSimulator.getState('${stateKeys[0]}',0)-1); refreshPreview()`;
             }
             if (/randomQuote/i.test(fnName)) {
-                return `const q = [{text: "A user interface is like a joke. If you have to explain it, it’s not that good.", author: "Anonymous"}, {text: "Measuring programming progress by lines of code is like measuring aircraft building progress by weight.", author: "Bill Gates"}, {text: "Talk is cheap. Show me the code.", author: "Linus Torvalds"}]; const r = q[Math.floor(Math.random()*q.length)]; ComposeSimulator.setState('text', r.text); ComposeSimulator.setState('author', r.author); refreshPreview();`;
+                return `const q = [{text: 'A user interface is like a joke. If you have to explain it, it’s not that good.', author: 'Anonymous'}, {text: 'Measuring programming progress by lines of code is like measuring aircraft building progress by weight.', author: 'Bill Gates'}, {text: 'Talk is cheap. Show me the code.', author: 'Linus Torvalds'}]; const r = q[Math.floor(Math.random()*q.length)]; ComposeSimulator.setState('text', r.text); ComposeSimulator.setState('author', r.author); refreshPreview();`.replace(/"/g, '&quot;');
             }
         }
         // count++ / count--
