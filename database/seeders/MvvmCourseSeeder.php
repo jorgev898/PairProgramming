@@ -84,6 +84,7 @@ class MvvmCourseSeeder extends Seeder
                     ]
                 ]
             ]
+            ]
         );
 
         // Lesson 2: MVVM con Jetpack Compose + Video
@@ -131,6 +132,7 @@ class MvvmCourseSeeder extends Seeder
                     ]
                 ]
             ]
+            ]
         );
 
         // Lesson 3: Reto de Programación
@@ -177,6 +179,7 @@ class MvvmCourseSeeder extends Seeder
                         'note' => 'Copia este código y pégalo en la sala colaborativa (PairSync) para probarlo en el simulador en tiempo real.'
                     ]
                 ]
+            ]
             ]
         );
     }
