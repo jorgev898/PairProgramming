@@ -49,6 +49,12 @@ const ComposeSimulator = {
             else v = v.replace(/^["']|["']$/g, '');
             if (this.state[m[1]] === undefined) this.state[m[1]] = v;
         }
+        
+        // Custom hack to support QuotesApp demo without full Kotlin parsing
+        if (code.includes('QuotesViewModel')) {
+            if (this.state['text'] === undefined) this.state['text'] = "Talk is cheap. Show me the code.";
+            if (this.state['author'] === undefined) this.state['author'] = "Linus Torvalds";
+        }
     },
 
     extractComposables(code) {
@@ -542,6 +548,9 @@ const ComposeSimulator = {
             if (/decrement|minus|sub/i.test(fnName)) {
                 const stateKeys = Object.keys(this.state).filter(k => typeof this.state[k] === 'number');
                 if (stateKeys.length > 0) return `ComposeSimulator.setState('${stateKeys[0]}', ComposeSimulator.getState('${stateKeys[0]}',0)-1); refreshPreview()`;
+            }
+            if (/randomQuote/i.test(fnName)) {
+                return `const q = [{text: "A user interface is like a joke. If you have to explain it, it’s not that good.", author: "Anonymous"}, {text: "Measuring programming progress by lines of code is like measuring aircraft building progress by weight.", author: "Bill Gates"}, {text: "Talk is cheap. Show me the code.", author: "Linus Torvalds"}]; const r = q[Math.floor(Math.random()*q.length)]; ComposeSimulator.setState('text', r.text); ComposeSimulator.setState('author', r.author); refreshPreview();`;
             }
         }
         // count++ / count--
