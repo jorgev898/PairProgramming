@@ -111,8 +111,8 @@ class MvvmCourseSeeder extends Seeder
                     [
                         'type' => 'video',
                         'title' => 'Explicación Práctica',
-                        'body' => 'Mira este video para entender cómo la interfaz reacciona a los cambios en el StateFlow del ViewModel.',
-                        'url' => 'https://www.youtube.com/embed/5aXQz9tAyd4' // Example video URL (can be changed)
+                        'body' => 'Mira este video oficial de Android Developers para entender a fondo cómo funciona el Estado y la recomposición en Jetpack Compose.',
+                        'url' => 'https://www.youtube.com/embed/V-s4z8njlsQ' // Example video URL (can be changed)
                     ],
                     [
                         'type' => 'concept',
