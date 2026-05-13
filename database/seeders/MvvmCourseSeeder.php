@@ -23,21 +23,26 @@ class MvvmCourseSeeder extends Seeder
         }
 
         // Create the Course
-        $course = Course::create([
-            'user_id' => $user->id,
-            'icon' => '🏛️',
-            'title' => 'Arquitectura MVVM en Android',
-            'description' => 'Domina el patrón Modelo-Vista-ViewModel (MVVM) utilizando Jetpack Compose. Aprende a separar la lógica de negocio de la interfaz de usuario para crear aplicaciones escalables y mantenibles.',
-            'level' => 'intermediate',
-            'color' => '#10b981', // Emerald green
-        ]);
+        $course = Course::updateOrCreate(
+            ['title' => 'Arquitectura MVVM en Android'],
+            [
+                'user_id' => $user->id,
+                'icon' => '🏛️',
+                'description' => 'Domina el patrón Modelo-Vista-ViewModel (MVVM) utilizando Jetpack Compose. Aprende a separar la lógica de negocio de la interfaz de usuario para crear aplicaciones escalables y mantenibles.',
+                'level' => 'intermediate',
+                'color' => '#10b981', // Emerald green
+            ]
+        );
 
         // Lesson 1: Fundamentos teóricos
-        Lesson::create([
-            'course_id' => $course->id,
-            'title' => 'Fundamentos de MVVM',
-            'description' => '¿Qué es MVVM y por qué es el estándar recomendado por Google para aplicaciones Android modernas?',
-            'duration' => '15 min',
+        Lesson::updateOrCreate(
+            [
+                'course_id' => $course->id,
+                'title' => 'Fundamentos de MVVM',
+            ],
+            [
+                'description' => '¿Qué es MVVM y por qué es el estándar recomendado por Google para aplicaciones Android modernas?',
+                'duration' => '15 min',
             'icon' => '📖',
             'order' => 1,
             'available' => true,
@@ -46,26 +51,26 @@ class MvvmCourseSeeder extends Seeder
                     [
                         'type' => 'intro',
                         'title' => 'Introducción a MVVM',
-                        'body' => 'El patrón Model-View-ViewModel (MVVM) ayuda a separar limpiamente la interfaz de usuario de la lógica de negocio y de los datos. Esta separación permite que el código sea mucho más fácil de testear, mantener y escalar en equipos grandes.'
+                        'body' => 'El patrón Model-View-ViewModel (MVVM) ayuda a organizar nuestro código para llevar un mejor control. Separa la app en tres módulos distintos, facilitando el mantenimiento y testeo.'
                     ],
                     [
                         'type' => 'concept',
                         'title' => 'Componentes de la Arquitectura',
                         'body' => 'MVVM consta de tres componentes principales que se comunican de forma unidireccional:',
                         'bullets' => [
-                            '**Model (Modelo):** Representa la capa de datos. Es el responsable de obtener los datos de una API, base de datos local (Room) o caché. No sabe nada de la interfaz visual.',
-                            '**ViewModel:** Actúa como puente entre el Modelo y la Vista. Contiene la lógica de presentación. Expone los datos utilizando flujos observables (`StateFlow` o `LiveData`) para que la Vista reaccione a los cambios.',
-                            '**View (Vista):** Es tu interfaz gráfica (Actividades, Fragmentos o Composables en Jetpack Compose). Su única responsabilidad es pintar en pantalla los datos que el ViewModel le proporciona y notificar al ViewModel sobre acciones del usuario (clicks, texto introducido, etc).'
+                            '**Model (Modelo):** Representa la capa de datos. Es decir, cuando recuperamos de una base de datos o de un servicio web, toda esa información la almacenaremos en modelos de datos.',
+                            '**ViewModel:** Es la conexión entre el modelo y la vista. Las vistas se suscriben a sus respectivos ViewModels y estos, al percatarse de que el modelo ha sido modificado, lo notificarán a la vista.',
+                            '**View (Vista):** Es la parte de la UI (Composables, XML, Activities). Actuarán ejecutando acciones (ej. al pulsar un botón) pero no realizarán la lógica, se suscribirán al ViewModel y este les dirá cuándo y cómo pintar.'
                         ]
                     ],
                     [
                         'type' => 'concept',
                         'title' => 'La Regla de Oro',
-                        'body' => 'En MVVM, la comunicación debe fluir de arriba hacia abajo, y los eventos de abajo hacia arriba:',
+                        'body' => 'En MVVM, la comunicación fluye hacia abajo y los eventos hacia arriba:',
                         'bullets' => [
                             'La **Vista** conoce y observa al **ViewModel**.',
-                            'El **ViewModel** conoce al **Modelo**, pero *nunca* tiene una referencia directa a la Vista (esto previene fugas de memoria).',
-                            'El **Modelo** no conoce a nadie, solo devuelve datos.'
+                            'El **ViewModel** conoce al **Modelo**, pero *nunca* tiene una referencia directa a la Vista.',
+                            'El **Modelo** no conoce a nadie, solo provee datos.'
                         ]
                     ],
                     [
@@ -79,14 +84,17 @@ class MvvmCourseSeeder extends Seeder
                     ]
                 ]
             ]
-        ]);
+        );
 
         // Lesson 2: MVVM con Jetpack Compose + Video
-        Lesson::create([
-            'course_id' => $course->id,
-            'title' => 'MVVM en Jetpack Compose',
-            'description' => 'Cómo integrar ViewModels en Compose usando State Hoisting y StateFlow.',
-            'duration' => '25 min',
+        Lesson::updateOrCreate(
+            [
+                'course_id' => $course->id,
+                'title' => 'MVVM en Jetpack Compose',
+            ],
+            [
+                'description' => 'Cómo integrar ViewModels en Compose usando State Hoisting y StateFlow.',
+                'duration' => '25 min',
             'icon' => '🎥',
             'order' => 2,
             'available' => true,
@@ -123,14 +131,17 @@ class MvvmCourseSeeder extends Seeder
                     ]
                 ]
             ]
-        ]);
+        );
 
         // Lesson 3: Reto de Programación
-        Lesson::create([
-            'course_id' => $course->id,
-            'title' => 'Reto: Implementando MVVM',
-            'description' => 'Pon a prueba tus conocimientos creando tu primera interfaz con estado manejado por un ViewModel.',
-            'duration' => '45 min',
+        Lesson::updateOrCreate(
+            [
+                'course_id' => $course->id,
+                'title' => 'Reto: App de Citas Célebres',
+            ],
+            [
+                'description' => 'Pon a prueba tus conocimientos creando la clásica app de Citas (Quotes App) con estado manejado por un ViewModel.',
+                'duration' => '45 min',
             'icon' => '🎯',
             'order' => 3,
             'available' => true,
@@ -138,23 +149,23 @@ class MvvmCourseSeeder extends Seeder
                 'sections' => [
                     [
                         'type' => 'intro',
-                        'title' => 'El Reto del Modo Oscuro',
-                        'body' => 'Es momento de codificar. Usaremos el simulador interactivo de PairSync para resolver este reto. Deberás implementar un ViewModel que controle tanto un contador como un interruptor de "Modo Oscuro".'
+                        'title' => 'El Reto de las Citas Célebres',
+                        'body' => 'Es momento de codificar. Usaremos el simulador interactivo de PairSync. Deberás implementar un ViewModel que provea una cita aleatoria y hacer que la interfaz de Compose se actualice al pulsar un botón.'
                     ],
                     [
                         'type' => 'exercise',
                         'title' => 'Misión',
-                        'body' => 'Completa el código Kotlin proporcionado para hacer que los componentes reaccionen correctamente al ViewModel.',
+                        'body' => 'Completa el código Kotlin proporcionado para conectar la Vista con el ViewModel usando StateFlow.',
                         'tasks' => [
                             [
-                                'title' => '1. Conecta el Contador',
-                                'description' => 'Dentro de la función `CounterApp()`, haz que el botón de incrementar llame a la función `increment()` del ViewModel.',
-                                'hint' => 'Asigna `onClick = { viewModel.increment() }` dentro del botón.'
+                                'title' => '1. Observa el Estado',
+                                'description' => 'Dentro de la función `QuotesApp()`, observa el `StateFlow` del ViewModel usando `collectAsState()`.',
+                                'hint' => 'Usa `val quote by viewModel.quote.collectAsState()`'
                             ],
                             [
-                                'title' => '2. Implementa el Switch',
-                                'description' => 'El Switch (interruptor) debe controlar el estado `isDarkMode`. Notifica al ViewModel cada vez que el Switch cambie su valor.',
-                                'hint' => 'Usa `onCheckedChange = { viewModel.toggleDarkMode(it) }`.'
+                                'title' => '2. Conecta el Botón',
+                                'description' => 'Haz que el botón llame a la función `randomQuote()` del ViewModel para actualizar la interfaz.',
+                                'hint' => 'Asigna `onClick = { viewModel.randomQuote() }` dentro del botón.'
                             ]
                         ]
                     ],
@@ -162,11 +173,11 @@ class MvvmCourseSeeder extends Seeder
                         'type' => 'code',
                         'title' => 'Código Inicial (Starter Code)',
                         'language' => 'kotlin',
-                        'code' => "class AppViewModel {\n    var count = 0\n    var isDarkMode = false\n\n    fun increment() {\n        count++\n    }\n\n    fun toggleDarkMode(enabled: Boolean) {\n        isDarkMode = enabled\n    }\n}\n\n@Composable\nfun CounterApp() {\n    val viewModel = AppViewModel()\n\n    Scaffold(\n        topBar = { TopAppBar(title = { Text(\"Reto MVVM\") }) }\n    ) {\n        Column {\n            Card {\n                Text(\"Contador: \${viewModel.count}\")\n                Button(onClick = { /* TODO 1 */ }) {\n                    Text(\"Sumar +1\")\n                }\n            }\n            \n            Row {\n                Text(\"Modo Oscuro\")\n                Switch(\n                    checked = viewModel.isDarkMode,\n                    onCheckedChange = { /* TODO 2 */ }\n                )\n            }\n        }\n    }\n}",
+                        'code' => "data class Quote(val text: String, val author: String)\n\nclass QuotesViewModel : ViewModel() {\n    private val quotes = listOf(\n        Quote(\"Talk is cheap. Show me the code.\", \"Linus Torvalds\"),\n        Quote(\"A user interface is like a joke. If you have to explain it, it’s not that good.\", \"Anonymous\"),\n        Quote(\"Measuring programming progress by lines of code is like measuring aircraft building progress by weight.\", \"Bill Gates\")\n    )\n\n    private val _quote = MutableStateFlow(quotes.first())\n    val quote: StateFlow<Quote> = _quote.asStateFlow()\n\n    fun randomQuote() {\n        _quote.value = quotes.random()\n    }\n}\n\n@Composable\nfun QuotesApp() {\n    val viewModel = QuotesViewModel()\n    // TODO 1: Observa el estado aquí\n    // val currentQuote = ...\n\n    Scaffold(\n        topBar = { TopAppBar(title = { Text(\"Citas Célebres MVVM\") }) }\n    ) {\n        Column(modifier = Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.Center) {\n            Card(modifier = Modifier.fillMaxWidth().padding(16.dp)) {\n                Column(modifier = Modifier.padding(16.dp)) {\n                    Text(text = \"\\\"\${/* currentQuote.text */}\\\"\", style = MaterialTheme.typography.h6)\n                    Spacer(modifier = Modifier.height(8.dp))\n                    Text(text = \"- \${/* currentQuote.author */}\", style = MaterialTheme.typography.body2)\n                }\n            }\n            \n            Button(onClick = { /* TODO 2 */ }, modifier = Modifier.align(Alignment.CenterHorizontally)) {\n                Text(\"Siguiente Cita\")\n            }\n        }\n    }\n}",
                         'note' => 'Copia este código y pégalo en la sala colaborativa (PairSync) para probarlo en el simulador en tiempo real.'
                     ]
                 ]
             ]
-        ]);
+        );
     }
 }
