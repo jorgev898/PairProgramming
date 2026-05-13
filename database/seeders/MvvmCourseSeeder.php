@@ -112,7 +112,7 @@ class MvvmCourseSeeder extends Seeder
                         'type' => 'video',
                         'title' => 'Explicación Práctica',
                         'body' => 'Mira este video oficial de Android Developers para entender a fondo cómo funciona el Estado y la recomposición en Jetpack Compose.',
-                        'url' => 'https://www.youtube.com/embed/V-s4z8njlsQ' // Example video URL (can be changed)
+                        'url' => 'https://www.youtube.com/embed/bMcbHjU2CWs' // Oficial Jetpack Compose Basics
                     ],
                     [
                         'type' => 'concept',
