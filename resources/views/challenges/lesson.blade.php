@@ -272,13 +272,25 @@
         @endif
 
         {{-- CTA --}}
+        @php
+            $nextLesson = $lessons->where('order', '>', $lesson['order'])->first();
+        @endphp
         <div class="cta-section">
-            <h2>{{ __('Ready to Practice?') }}</h2>
-            <p>{{ __('Start a pair programming session and work on the exercises with your partner.') }}</p>
-            <a href="{{ route('pair.index', ['lesson_id' => $lesson['id']]) }}" class="btn-cta" id="btn-start-session">
-                ⚡ {{ __('Start Pair Session') }}
-                <span class="arrow">→</span>
-            </a>
+            @if($nextLesson)
+                <h2>{{ __('Continúa Aprendiendo') }}</h2>
+                <p>{{ __('Avanza a la siguiente lección para seguir construyendo tus conocimientos.') }}</p>
+                <a href="{{ route('challenges.lesson', [$challenge['id'], $nextLesson['id']]) }}" class="btn-cta">
+                    {{ __('Pasar a la siguiente lección') }}
+                    <span class="arrow">→</span>
+                </a>
+            @else
+                <h2>{{ __('Ready to Practice?') }}</h2>
+                <p>{{ __('Start a pair programming session and work on the exercises with your partner.') }}</p>
+                <a href="{{ route('pair.index', ['lesson_id' => $lesson['id']]) }}" class="btn-cta" id="btn-start-session">
+                    ⚡ {{ __('Start Pair Session') }}
+                    <span class="arrow">→</span>
+                </a>
+            @endif
             <br>
             <a href="{{ route('challenges.show', $challenge['id']) }}" class="btn-back-lesson">← {{ __('Back to all lessons') }}</a>
         </div>
