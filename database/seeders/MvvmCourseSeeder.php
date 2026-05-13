@@ -38,9 +38,10 @@ class MvvmCourseSeeder extends Seeder
         Lesson::updateOrCreate(
             [
                 'course_id' => $course->id,
-                'title' => 'Fundamentos de MVVM',
+                'order' => 1,
             ],
             [
+                'title' => 'Fundamentos de MVVM',
                 'description' => '¿Qué es MVVM y por qué es el estándar recomendado por Google para aplicaciones Android modernas?',
                 'duration' => '15 min',
             'icon' => '📖',
@@ -91,9 +92,10 @@ class MvvmCourseSeeder extends Seeder
         Lesson::updateOrCreate(
             [
                 'course_id' => $course->id,
-                'title' => 'MVVM en Jetpack Compose',
+                'order' => 2,
             ],
             [
+                'title' => 'MVVM en Jetpack Compose',
                 'description' => 'Cómo integrar ViewModels en Compose usando State Hoisting y StateFlow.',
                 'duration' => '25 min',
             'icon' => '🎥',
@@ -129,6 +131,14 @@ class MvvmCourseSeeder extends Seeder
                         'language' => 'kotlin',
                         'code' => "class CounterViewModel : ViewModel() {\n    // Estado interno inmutable desde fuera\n    private val _count = MutableStateFlow(0)\n    // Estado público observable por Compose\n    val count: StateFlow<Int> = _count.asStateFlow()\n\n    // Acción invocada por la Vista\n    fun increment() {\n        _count.value++\n    }\n}",
                         'note' => 'Nota cómo se usa el guión bajo `_count` para proteger la variable interna, exponiendo solo una versión de solo lectura `count` a la UI.'
+                    ],
+                    [
+                        'type' => 'code',
+                        'title' => 'Conectando la Vista (Composable)',
+                        'body' => 'Para que la interfaz reaccione a los cambios del `StateFlow`, debemos "observarlo" usando `collectAsState()`. Esto convierte el flujo en un Estado que Compose entiende.',
+                        'language' => 'kotlin',
+                        'code' => "@Composable\nfun CounterScreen() {\n    // 1. Instanciar el ViewModel\n    val viewModel = CounterViewModel()\n    \n    // 2. Observar el estado\n    val count by viewModel.count.collectAsState()\n\n    Column {\n        Text(\"Contador: \$count\")\n        // 3. Ejecutar acción\n        Button(onClick = { viewModel.increment() }) {\n            Text(\"Sumar +1\")\n        }\n    }\n}",
+                        'note' => 'Sin `collectAsState()`, la pantalla nunca se actualizaría. Es la magia que une a Compose con MVVM.'
                     ]
                 ]
             ]
@@ -139,9 +149,10 @@ class MvvmCourseSeeder extends Seeder
         Lesson::updateOrCreate(
             [
                 'course_id' => $course->id,
-                'title' => 'Reto: App de Citas Célebres',
+                'order' => 3,
             ],
             [
+                'title' => 'Reto: App de Citas Célebres',
                 'description' => 'Pon a prueba tus conocimientos creando la clásica app de Citas (Quotes App) con estado manejado por un ViewModel.',
                 'duration' => '45 min',
             'icon' => '🎯',
