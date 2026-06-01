@@ -176,7 +176,7 @@
             <p class="subtitle">{{ __($lesson['description']) }}</p>
         </div>
 
-        @if (!empty($lesson['content']['sections']))
+        @if (is_array($lesson['content']) && !empty($lesson['content']['sections']))
             @foreach ($lesson['content']['sections'] as $section)
 
                 @if ($section['type'] === 'intro')
