@@ -73,9 +73,9 @@ class SessionController extends Controller
         $myRole = $this->resolveRole($session, $myName);
 
         $lgConfig = [
-            'url' => config('services.langraph.url', env('LANGRAPH_API_URL')),
-            'key' => config('services.langraph.key', env('LANGRAPH_API_KEY')),
-            'agent_id' => config('services.langraph.agent_id', env('LANGRAPH_AGENT_ID')),
+            'url' => config('services.langraph.url'),
+            'key' => config('services.langraph.key'),
+            'agent_id' => config('services.langraph.agent_id'),
         ];
 
         return view('pair.room', compact('session', 'myRole', 'myName', 'lgConfig'));

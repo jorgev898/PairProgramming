@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'langraph' => [
+        'url' => env('LANGRAPH_API_URL'),
+        'key' => env('LANGRAPH_API_KEY'),
+        'agent_id' => env('LANGRAPH_AGENT_ID'),
+    ],
+
 ];
