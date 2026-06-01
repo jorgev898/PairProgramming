@@ -12,7 +12,18 @@
         guidesStrategy: @json(__('Guides the strategy')),
         shareCode: @json(__('Share your code →')),
         waiting: @json(__('waiting...')),
-        you: @json(__('You'))
+        you: @json(__('You')),
+        saving: @json(__('Saving...')),
+        saved: @json(__('Saved')),
+        error: @json(__('Error')),
+        running: @json(__('Running...')),
+        run: @json(__('Run')),
+        compiling: @json(__('Compiling...')),
+        composeMode: @json(__('Compose Mode')),
+        consoleMode: @json(__('Console Mode')),
+        compilingRunning: @json(__('Compiling and running...')),
+        noOutput: @json(__('No output')),
+        readyToRun: @json(__('Ready to run code...'))
     };
 
     /* ── LangGraph Config ── */
@@ -144,9 +155,9 @@
     function setSaveStatus(s) {
         const el = document.getElementById('save-status');
         if (!el) return;
-        if (s === 'saving') { el.textContent = '⏳ Saving...'; el.className = 'save-status saving'; }
-        else if (s === 'saved') { el.textContent = '✓ Saved'; el.className = 'save-status saved'; }
-        else { el.textContent = '⚠ Error'; el.className = 'save-status'; }
+        if (s === 'saving') { el.textContent = '⏳ ' + (trans.saving ?? 'Saving...'); el.className = 'save-status saving'; }
+        else if (s === 'saved') { el.textContent = '✓ ' + (trans.saved ?? 'Saved'); el.className = 'save-status saved'; }
+        else { el.textContent = '⚠ ' + (trans.error ?? 'Error'); el.className = 'save-status'; }
     }
 
     async function saveCursor(line, column) {
@@ -207,9 +218,9 @@
         if (!editor || isRunning) return;
         isRunning = true;
         const btn = document.getElementById('btn-run');
-        btn.disabled = true; btn.textContent = '⏳ Running...';
+        btn.disabled = true; btn.textContent = '⏳ ' + (trans.running ?? 'Running...');
         const out = document.getElementById('output-content');
-        out.innerHTML = '<span class="output-info">Compiling and running...</span>';
+        out.innerHTML = '<span class="output-info">' + escHtml(trans.compilingRunning ?? 'Compiling and running...') + '</span>';
 
         try {
             const res = await fetch('/room/' + ROOM_CODE + '/run', {
@@ -227,15 +238,15 @@
                 if (data.run) {
                     if (data.run.stdout) html += '<span class="output-success">' + escHtml(data.run.stdout) + '</span>';
                     if (data.run.stderr) html += '<span class="output-error">' + escHtml(data.run.stderr) + '</span>';
-                    if (!data.run.stdout && !data.run.stderr && !data.compile?.stderr) html += '<span class="output-info">(No output)</span>';
+                    if (!data.run.stdout && !data.run.stderr && !data.compile?.stderr) html += '<span class="output-info">(' + escHtml(trans.noOutput ?? 'No output') + ')</span>';
                 }
-                out.innerHTML = html || '<span class="output-info">(No output)</span>';
+                out.innerHTML = html || '<span class="output-info">(' + escHtml(trans.noOutput ?? 'No output') + ')</span>';
             }
         } catch (e) {
             out.innerHTML = '<span class="output-error">⚠ ' + escHtml(e.message) + '</span>';
         } finally {
             isRunning = false;
-            btn.disabled = false; btn.textContent = '▶ Run';
+            btn.disabled = false; btn.textContent = '▶ ' + (trans.run ?? 'Run');
         }
     }
 
@@ -549,7 +560,7 @@
             .replace(/\n/g, '<br>');
     }
 
-    function clearOutput() { document.getElementById('output-content').innerHTML = '<span class="output-info">Ready to run code...</span>'; }
+    function clearOutput() { document.getElementById('output-content').innerHTML = '<span class="output-info">' + escHtml(trans.readyToRun ?? 'Ready to run code...') + '</span>'; }
 
     /* ══════════════════════════════════════════
        PARTICIPANT CHAT
@@ -730,7 +741,7 @@
         if (code === lastPreviewCode && !Object.keys(ComposeSimulator.state).length) return;
         lastPreviewCode = code;
         isPreviewing = true;
-        setPreviewStatus('compiling', '⏳ Compiling...');
+        setPreviewStatus('compiling', '⏳ ' + (trans.compiling ?? 'Compiling...'));
 
         try {
             const res = await fetch('/room/' + ROOM_CODE + '/preview', {
@@ -751,10 +762,10 @@
             if (data.mode === 'compose') {
                 const html = ComposeSimulator.parse(data.kotlinCode);
                 document.getElementById('preview-content').innerHTML = html;
-                setPreviewStatus('ready', '✓ Compose Mode');
+                setPreviewStatus('ready', '✓ ' + (trans.composeMode ?? 'Compose Mode'));
             } else {
                 runConsolePreview(data.jsCode);
-                setPreviewStatus('ready', '✓ Console Mode');
+                setPreviewStatus('ready', '✓ ' + (trans.consoleMode ?? 'Console Mode'));
             }
         } catch (e) {
             setPreviewStatus('error', '⚠ ' + e.message);

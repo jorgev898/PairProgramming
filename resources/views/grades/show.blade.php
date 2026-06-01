@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('Calificar') }} — {{ $course->title }} — PairSync</title>
+    <title>{{ __('Grade') }} — {{ $course->title }} — PairSync</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -134,14 +134,14 @@
         <a href="{{ url('/') }}" class="logo"><div class="logo-icon">⌨</div><span class="logo-name">Pair<span>Sync</span></span></a>
         <div class="nav-divider"></div>
         <div class="breadcrumb">
-            <a href="{{ route('grades.index') }}">{{ __('Calificaciones') }}</a>
+            <a href="{{ route('grades.index') }}">{{ __('Grades') }}</a>
             <span class="sep">›</span>
             <span class="cur">{{ $course->title }}</span>
         </div>
     </div>
     <div class="nav-right">
         @auth <span style="color:var(--text-dim);font-size:.85rem;font-weight:600">{{ auth()->user()->name }}</span> @endauth
-        <a href="{{ route('grades.index') }}" class="btn-small">← {{ __('Volver') }}</a>
+        <a href="{{ route('grades.index') }}" class="btn-small">← {{ __('Back') }}</a>
         @if($moodleConfigured)
             <button class="btn-small btn-sync-nav" id="btnSyncAll" onclick="syncAll()">🔄 {{ __('Sync Moodle') }}</button>
         @else
@@ -152,8 +152,8 @@
 
 <section class="page-hero">
     <div class="hero-badge">{{ $course->icon }} {{ $course->title }}</div>
-    <h1>{{ __('Calificaciones') }} — {{ $course->title }}</h1>
-    <p class="subtitle">{{ __('Haz clic en un estudiante para desplegar sus lecciones · Escala 0.0 – 5.0 · 💬 feedback') }}</p>
+    <h1>{{ __('Grades') }} — {{ $course->title }}</h1>
+    <p class="subtitle">{{ __('Click a student to expand lessons · Scale 0.0 – 5.0 · 💬 feedback') }}</p>
 </section>
 
 <section class="accordion-list" id="accordionList">
@@ -172,7 +172,7 @@
             <div class="st-email">{{ $student->email }}</div>
         </div>
         <div class="st-badges">
-            <span class="st-badge st-badge-count">{{ $gc }}/{{ $lessons->count() }} {{ __('notas') }}</span>
+            <span class="st-badge st-badge-count">{{ $gc }}/{{ $lessons->count() }} {{ __('grades') }}</span>
             <span class="st-badge st-badge-avg">⌀ {{ $avg }}</span>
         </div>
         <span class="st-chevron">▼</span>
@@ -225,8 +225,8 @@
 @empty
     <div class="empty-state">
         <div class="ei">👥</div>
-        <h2>{{ __('Sin estudiantes inscritos') }}</h2>
-        <p>{{ __('Los estudiantes deben inscribirse al curso desde la página de Challenges.') }}</p>
+        <h2>{{ __('No students enrolled') }}</h2>
+        <p>{{ __('Students must enroll in the course from the Challenges page.') }}</p>
     </div>
 @endforelse
 </section>
@@ -234,11 +234,11 @@
 <div class="modal-overlay" id="fbModal">
     <div class="modal">
         <h3>💬 {{ __('Feedback') }}</h3>
-        <textarea id="fbText" placeholder="{{ __('Escribe tu retroalimentación...') }}"></textarea>
+        <textarea id="fbText" placeholder="{{ __('Write your feedback...') }}"></textarea>
         <input type="hidden" id="fbSid"><input type="hidden" id="fbLid"><input type="hidden" id="fbCid">
         <div class="modal-actions">
-            <button class="btn-m btn-mc" onclick="closeFb()">{{ __('Cancelar') }}</button>
-            <button class="btn-m btn-ms" onclick="saveFb()">{{ __('Guardar') }}</button>
+            <button class="btn-m btn-mc" onclick="closeFb()">{{ __('Cancel') }}</button>
+            <button class="btn-m btn-ms" onclick="saveFb()">{{ __('Save') }}</button>
         </div>
     </div>
 </div>

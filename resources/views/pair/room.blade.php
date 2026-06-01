@@ -34,7 +34,7 @@
         @endif
         <div id="role-indicator"
             class="role-indicator {{ $myRole === 'driver' ? 'is-driver' : ($myRole === 'navigator' ? 'is-navigator' : '') }}">
-            @if($myRole === 'driver') 🧑‍💻 Driver @elseif($myRole === 'navigator') 🧭 Navigator @else 👀 ... @endif
+            @if($myRole === 'driver') 🧑‍💻 {{ __('Driver') }} @elseif($myRole === 'navigator') 🧭 {{ __('Navigator') }} @else 👀 ... @endif
         </div>
         <div class="topbar-spacer"></div>
         <div style="display:flex;gap:8px;align-items:center;margin-right:8px">
@@ -62,13 +62,13 @@
             <div class="editor-main">
                 <div class="editor-toolbar">
                     <span class="lang-badge">Kotlin</span>
-                    <button class="btn-run" id="btn-run" onclick="runCode()">▶ Run</button>
-                    <button class="btn-preview" id="btn-preview" onclick="togglePreview()">👁 Preview</button>
+                    <button class="btn-run" id="btn-run" onclick="runCode()">▶ {{ __('Run') }}</button>
+                    <button class="btn-preview" id="btn-preview" onclick="togglePreview()">👁 {{ __('Preview') }}</button>
                     <span class="auto-toggle" id="auto-toggle" onclick="toggleAutoPreview()">
-                        <span class="dot"></span> Auto
+                        <span class="dot"></span> {{ __('Auto') }}
                     </span>
                     <span class="save-status" id="save-status">
-                        @if($myRole === 'driver') ✓ Ready @else 👁 Read-only @endif
+                        @if($myRole === 'driver') ✓ {{ __('Ready') }} @else 👁 {{ __('Read-only') }} @endif
                     </span>
                 </div>
 
@@ -94,7 +94,7 @@
             {{-- ── RIGHT: Preview Panel (hidden until toggled) ── --}}
             <div class="preview-panel" id="preview-panel">
                 <div class="preview-header">
-                    <h4>📱 Preview</h4>
+                    <h4>📱 {{ __('Preview') }}</h4>
                     <span class="preview-status" id="preview-status">{{ __('Ready') }}</span>
                 </div>
                 <div class="preview-content" id="preview-content">

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('Calificaciones') }} — PairSync</title>
-    <meta name="description" content="Panel de calificaciones para docentes en PairSync.">
+    <title>{{ __('Grades') }} — PairSync</title>
+    <meta name="description" content="{{ __('Teacher grade panel on PairSync.') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -485,7 +485,7 @@
         <div class="nav-breadcrumb">
             <a href="{{ route('challenges.index') }}">{{ __('Challenges') }}</a>
             <span class="separator">›</span>
-            <span class="current">{{ __('Calificaciones') }}</span>
+            <span class="current">{{ __('Grades') }}</span>
         </div>
     </div>
 
@@ -499,12 +499,12 @@
 
 {{-- ── HEADER ── --}}
 <section class="page-header">
-    <div class="page-badge">📝 {{ __('Panel Docente') }}</div>
+    <div class="page-badge">📝 {{ __('Teacher Dashboard') }}</div>
     <h1>
-        <span class="gradient-text">{{ __('Califica tus') }}</span>
-        <span class="accent-text">{{ __('retos') }}</span>
+        <span class="gradient-text">{{ __('Grade your') }}</span>
+        <span class="accent-text">{{ __('challenges') }}</span>
     </h1>
-    <p>{{ __('Revisa el desempeño de tus estudiantes, asigna calificaciones y sincroniza con Moodle.') }}</p>
+    <p>{{ __('Review student performance, assign grades, and sync with Moodle.') }}</p>
 </section>
 
 {{-- ── STATS ── --}}
@@ -514,17 +514,17 @@
         <div class="stat-card">
             <div class="stat-icon">📚</div>
             <div class="stat-value">{{ $courses->count() }}</div>
-            <div class="stat-label">{{ __('Cursos') }}</div>
+            <div class="stat-label">{{ __('Courses') }}</div>
         </div>
         <div class="stat-card">
             <div class="stat-icon">👥</div>
             <div class="stat-value">{{ $courses->max('student_count') ?? 0 }}</div>
-            <div class="stat-label">{{ __('Estudiantes') }}</div>
+            <div class="stat-label">{{ __('Students') }}</div>
         </div>
         <div class="stat-card">
             <div class="stat-icon">✅</div>
             <div class="stat-value">{{ $courses->sum('graded_count') }}</div>
-            <div class="stat-label">{{ __('Calificaciones') }}</div>
+            <div class="stat-label">{{ __('Grades') }}</div>
         </div>
     </div>
 </section>
@@ -545,7 +545,7 @@
 
             <div class="card-progress">
                 <div class="progress-header">
-                    <span class="progress-label">{{ __('Calificado') }}</span>
+                    <span class="progress-label">{{ __('Graded') }}</span>
                     <span class="progress-value">{{ $course->graded_percent }}%</span>
                 </div>
                 <div class="progress-track">
@@ -556,11 +556,11 @@
             <div class="card-stats">
                 <div class="card-stat">
                     <div class="card-stat-value">{{ $course->lessons_count }}</div>
-                    <div class="card-stat-label">{{ __('Lecciones') }}</div>
+                    <div class="card-stat-label">{{ __('Lessons') }}</div>
                 </div>
                 <div class="card-stat">
                     <div class="card-stat-value">{{ $course->student_count }}</div>
-                    <div class="card-stat-label">{{ __('Estudiantes') }}</div>
+                    <div class="card-stat-label">{{ __('Students') }}</div>
                 </div>
                 <div class="card-stat">
                     <div class="card-stat-value">{{ $course->synced_count }}</div>
@@ -569,7 +569,7 @@
             </div>
 
             <a href="{{ route('grades.show', $course->id) }}" class="btn-grade" id="btn-grade-{{ $course->id }}">
-                📝 {{ __('Calificar') }}
+                📝 {{ __('Grade') }}
                 <span class="arrow">→</span>
             </a>
         </article>
@@ -579,10 +579,10 @@
 @else
     <div class="empty-state">
         <div class="empty-icon">📝</div>
-        <h2>{{ __('No tienes cursos aún') }}</h2>
-        <p>{{ __('Crea un curso para empezar a calificar a tus estudiantes.') }}</p>
+        <h2>{{ __("You don't have any courses yet") }}</h2>
+        <p>{{ __('Create a course to start grading your students.') }}</p>
         <a href="{{ route('courses.create') }}" class="btn-create">
-            ✨ {{ __('Crear curso') }}
+            ✨ {{ __('Create Course') }}
         </a>
     </div>
 @endif

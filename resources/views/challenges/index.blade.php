@@ -554,7 +554,7 @@
             <span class="nav-user">{{ auth()->user()->name }}</span>
             @if(auth()->user()->isTeacher())
                 <a href="{{ route('courses.index') }}" class="btn-nav-outline">{{ __('Manage Courses') }}</a>
-                <a href="{{ route('grades.index') }}" class="btn-nav-outline">{{ __('Calificaciones') }}</a>
+                <a href="{{ route('grades.index') }}" class="btn-nav-outline">{{ __('Grades') }}</a>
             @endif
             <a href="{{ route('pair.index') }}" class="btn-nav-outline">{{ __('Sessions') }}</a>
             <form method="POST" action="{{ route('logout') }}" style="display:inline;margin:0;">
